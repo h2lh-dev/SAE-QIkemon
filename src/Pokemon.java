@@ -13,5 +13,5 @@ class Pokemon{
     Attack attack2;
     Attack attack3;
     Attack attack4;
-    String[] faiblesse;
+    String[] affiniterDeType;
 }
