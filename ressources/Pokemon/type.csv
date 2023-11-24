@@ -16,5 +16,3 @@ Spectre,Normal,Combat,Spectre,Tenebres,NULL,NULL,NULL,Poison,Insecte,NULL,NULL,N
 Dragon,NULL,NULL,Glace,Dragon,NULL,NULL,NULL,Feu,Eau,Plante,Electrik,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 Tenebres,Psy,Insecte,Combat,NULL,NULL,NULL,NULL,Spectre,Tenebres,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 Acier,Poison,NULL,Feu,Combat,Sol,NULL,NULL,Normal,Plante,Glace,Vol,Psy,Insecte,Roche,Spectre,Dragon,Tenebres,Acier
-
-

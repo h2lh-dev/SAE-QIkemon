@@ -1,7 +1,4 @@
 import extensions.File;
-
-import java.sql.Types;
-
 import extensions.CSVFile;
 
 class JeuxPokemon extends Program{
@@ -26,8 +23,8 @@ class JeuxPokemon extends Program{
         Pokemon pokemon = new Pokemon();
         pokemon.id = id;
         pokemon.nom = POKEDEX[id][2];
-        pokemon.type1 = newType(POKEDEX[id][3]);
-        pokemon.type2 = newType(POKEDEX[id][4]);
+        pokemon.type1 = tabType(POKEDEX[id][3]);
+        pokemon.type2 = tabType(POKEDEX[id][4]);
         pokemon.lvl = lvl ;
         pokemon.xp = 0;
         pokemon.statPv = stringToInt(POKEDEX[id][6]);
@@ -48,17 +45,53 @@ class JeuxPokemon extends Program{
 
     }
 
+
+    // permet la création du tableau contenant les faiblesse du pokemon celon son ou ses types
     String[] newFaiblesse( String type1, String type2){
         String[] faiblesse = new String[18];
         if(equals(type2,"NULL")){
             for(int i =0;i<18;i++ ){
                 faiblesse[i] = tabType[idxType(type1)][i+1] ;
             }
+            return faiblesse;
         }else{
-            
+        String[] faiblesse = new String[36];
+        int i2 = 1;
+        int i3 = 0;
+            for(int i = 1;i<=18;i++){
+
+                faiblesse[i3] = tabType[idxType(type1)][i];
+                faiblesse[i2] = tabType[idxType(type1)][i];
+                i3 = i3 +2;
+                i2 = i2 +2;        
+            }
+            for(int i =0;i<=36;i++){
+                for(int cpt = 0;cpt<=36;cpt++){
+                    if(equals(faiblesse[i],faiblesse[cpt])){
+                        if(i>= 0 && i<= 4){
+                            faiblesse[cpt] = "NULL";
+                        }
+                        else if(i>=5 && i<= 15 && cpt >=16 ){
+                            faiblesse[cpt] = "NULL";
+                            faiblesse[i] = "NULL";
+                        }
+                    }
+                }
+            }
         }
         return faiblesse;
+    }
 
+    // Test pour verifier la fonction newFaiblesse
+    void testNewFaiblesse(){
+        String[] test1 = new String []{"NULL", "NULL", "Eau", "Sol", "Roche", "NULL", "NULL", "Feu", "Plante", "Glace", "Insecte", "Acier", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"};
+        assertEquals(test1,newFaiblesse("Feu","NULL"));
+        /*String[] test2 = new String []{};
+        test2 = newFaiblesse("Feu","Eau");
+        for(int i = 0;i<length(test2);i++){
+            println(test2[i]);
+        }
+        */
     }
 
     // Permet de return l'indice d'un type depuis le tableau tabType
@@ -68,14 +101,5 @@ class JeuxPokemon extends Program{
                 return i;
             }
         }
-    }
-
-
-
-    
-  
-
-    
-
-        
+    }   
 }
