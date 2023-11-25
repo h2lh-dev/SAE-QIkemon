@@ -6,7 +6,29 @@ class JeuxPokemon extends Program{
     // Creation tab
     final String[][] POKEDEX = toTabCSV(loadCSV("../ressources/Pokemon/pokemon.csv"));
     final String[][] tabType = toTabCSV(loadCSV("../ressources/Pokemon/type.csv"));
-    final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));    
+    final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));
+
+    // IDX POKEDEX
+    final int IDX_ID = 0;
+    final int IDX_NAME_POKEMON = 1;
+    final int IDX_TYPE1 = 2;
+    final int IDX_TYPE2 = 3;
+    final int IDX_STATPV = 4;
+    final int IDX_STATDEGAT = 5;
+    final int IDX_STATDEFENSE = 6;
+    final int IDX_STATVITESSE = 7;
+    final int IDX_LVLEVO = 8;
+    final int IDX_ATTACK1 = 9;
+    final int IDX_ATTACK2 = 10;
+    final int IDX_ATTACK3 = 11;
+    final int IDX_ATTACK4 = 12;
+
+    // IDX listAttack
+    final int IDX_NAME_ATTACK = 0;
+    final int IDX_STAT_ATTACK = 1;
+    final int IDX_PP = 2;
+    final int IDX_TYPE = 3;
+
 
     // Permet de transformer un fichier csv en tableaux de String
     String[][] toTabCSV(CSVFile csv){
@@ -28,22 +50,26 @@ class JeuxPokemon extends Program{
         pokemon.type2 = POKEDEX[id][4];
         pokemon.lvl = lvl ;
         pokemon.xp = 0;
-        pokemon.statPv = stringToInt(POKEDEX[id][6]);
-        pokemon.statAttack = stringToInt(POKEDEX[id][7]);
-        pokemon.statDefense = stringToInt(POKEDEX[id][8]);
-        pokemon.statVitesse = stringToInt(POKEDEX[id][9]);
-        pokemon.attack1 = newAttack();
-        pokemon.attack2 = newAttack();
-        pokemon.attack3 = newAttack();
-        pokemon.attack4 = newAttack();
+        pokemon.xpRequis = xpRequis(lvl);
+        pokemon.statPv = stringToInt(POKEDEX[id][5]);
+        pokemon.statAttack = stringToInt(POKEDEX[id][6]);
+        pokemon.statDefense = stringToInt(POKEDEX[id][7]);
+        pokemon.statVitesse = stringToInt(POKEDEX[id][8]);
+        //pokemon.attacks = newListAttack();
         pokemon.affiniterDeType = newaffiniterDeType(POKEDEX[id][3], POKEDEX[id][4]);
 
         return pokemon;
     }
 
-    Attack newAttack(){
-        return new Attack();
+    Attack newAttack(String nomAttack){
+        Attack attack = new Attack();
+
+        return attack;
     }
+
+    //Attack[] newListAttack(String attack1, String attack2, String attack3, String attack4){
+        
+    //}
 
     // permet la création du tableau contenant les affiniterDeType du pokemon celon son ou ses types
     String[] newaffiniterDeType( String type1, String type2){
@@ -110,7 +136,42 @@ class JeuxPokemon extends Program{
         assertEquals(idxType("Feu"), 2);
     }
 
-    void algorithm(){
+    // Permet de return l'indice d'une attaque depuis le tableau listAttack
+    int idxAttack(String Attack){
+        for(int i=1;i<length(listAttack,2);i++){
+            if(equals(Attack,listAttack[i][IDX_NAME_ATTACK])){
+                return i;
+            }
+        }
+    return -1;
+    }
+
+    void testIdxAttack(){
+        assertEquals(idxAttack("Flammeche"), 1);
+    }
+
+
+    // Fontion permettant de calculer Xp nécessaire au passage d'un niveau
+    int xpRequis(int lvl){
+        int xpRequis = 100;
+        for(int i = 0; i<lvl; i++ ){
+            xpRequis = (int) ((int) xpRequis * 1.10);
+        }
+        return xpRequis; 
+    }
+
+    void testXpRequis(){
+        assertEquals(xpRequis(1),110);
+        assertEquals(xpRequis(15),409);
+        assertEquals(xpRequis(20),655);
+        assertEquals(xpRequis(30),1694);
+    }
+
+
+
+
+
+    void _algorithm(){
         String[] test2 = new String []{};
         test2 = newaffiniterDeType("Sol","Eau");
         for(int i = 0;i<length(test2);i++){
@@ -118,4 +179,6 @@ class JeuxPokemon extends Program{
         }
         
     }
+
+
 }
