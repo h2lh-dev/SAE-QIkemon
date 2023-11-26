@@ -11,17 +11,6 @@ class JeuxPokemon extends Program{
     final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));
     final String[][] map = toTabCSV(loadCSV("../ressources/map/map.csv"));
 
-    //Afficher Map
-    void afficherMap(String[][] map){
-        for(int i = 0; i<length(map,1);i++){
-            for(int i2 = 0; i2<length(map,2);i2++){
-                println(map[i][i2]);
-            }
-        }
-
-
-    }
-
     // IDX POKEDEX
     final int IDX_ID = 0;
     final int IDX_NAME_POKEMON = 1;
@@ -54,23 +43,28 @@ class JeuxPokemon extends Program{
         }
         return tab;
     }
+
+    // Initialiser Pokemon 
     
     //Pour la création d'un pokemon on aura besoin de son ID qui va permettre de récuperer les information du pokemon dans le csv, et de son lvl poour lui attribuer
     Pokemon newPokemon(int id, int lvl){
         Pokemon pokemon = new Pokemon();
         pokemon.id = id;
-        pokemon.nom = POKEDEX[id][2];
-        pokemon.type1 = POKEDEX[id][3];
-        pokemon.type2 = POKEDEX[id][4];
+        pokemon.nom = POKEDEX[id][IDX_NAME_POKEMON];
+        pokemon.type1 = POKEDEX[id][IDX_TYPE1];
+        pokemon.type2 = POKEDEX[id][IDX_TYPE2];
         pokemon.lvl = lvl ;
         pokemon.xp = 0;
         pokemon.xpRequis = xpRequis(lvl);
-        pokemon.statPv = stringToInt(POKEDEX[id][5]);
-        pokemon.statAttack = stringToInt(POKEDEX[id][6]);
-        pokemon.statDefense = stringToInt(POKEDEX[id][7]);
-        pokemon.statVitesse = stringToInt(POKEDEX[id][8]);
-        //pokemon.attacks = newListAttack();
-        pokemon.affiniterDeType = newaffiniterDeType(POKEDEX[id][3], POKEDEX[id][4]);
+        pokemon.statPv = stringToInt(POKEDEX[id][IDX_STATPV]);
+        pokemon.statAttack = stringToInt(POKEDEX[id][IDX_STATDEGAT]);
+        pokemon.statDefense = stringToInt(POKEDEX[id][IDX_STATDEFENSE]);
+        pokemon.statVitesse = stringToInt(POKEDEX[id][IDX_STATVITESSE]);
+        pokemon.attacks = newListAttack(POKEDEX[id][IDX_ATTACK1],POKEDEX[id][IDX_ATTACK2],POKEDEX[id][IDX_ATTACK3],POKEDEX[id][IDX_ATTACK4],pokemon.lvl);
+        String[] affiniterdetype = newaffiniterDeType(pokemon.type1, pokemon.type2);
+        pokemon.faiblesseDeType = faiblessesDeType(affiniterdetype);
+        pokemon.ineficasseDeType = ineficasseDeType(affiniterdetype);
+        pokemon.resistanceDeType = resistanceDeType(affiniterdetype);
 
         return pokemon;
     }
@@ -190,6 +184,35 @@ class JeuxPokemon extends Program{
 
     }
 
+    String[] faiblessesDeType(String[] affiniterDeType){
+        String[] faiblesse = new String[10];
+        int cpt = 0;
+        for(int i = 5;i<14;i++){
+            faiblesse[cpt] = affiniterDeType[i];
+            cpt++;
+        }
+        return faiblesse;
+    }
+
+    String[] ineficasseDeType(String[] affiniterDeType){
+        String[] ineficasse = new String[4];
+        for(int i = 0;i<4;i++){
+            ineficasse[i] = affiniterDeType[i];
+        }
+        return ineficasse;
+    }
+
+    String[] resistanceDeType(String[] affiniterDeType){
+        String[] resistance = new String[22];
+        int cpt = 0;
+        for(int i = 15;i<36;i++){
+            resistance[cpt] = affiniterDeType[i];
+            cpt++;
+        }
+        return resistance;
+    }
+    
+
     // Permet de return l'indice d'un type depuis le tableau tabType
     int idxType(String type){
         for(int i=1 ; i<length(tabType,1);i++){
@@ -233,6 +256,20 @@ class JeuxPokemon extends Program{
         assertEquals(xpRequis(15),409);
         assertEquals(xpRequis(20),655);
         assertEquals(xpRequis(30),1694);
+    }
+
+
+    // MAP 
+
+    //Afficher Map
+    void afficherMap(String[][] map){
+        for(int i = 0; i<length(map,1);i++){
+            for(int i2 = 0; i2<length(map,2);i2++){
+                println(map[i][i2]);
+            }
+        }
+
+
     }
 
 
