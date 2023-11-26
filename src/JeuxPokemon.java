@@ -41,7 +41,7 @@ class JeuxPokemon extends Program{
     final int IDX_NAME_ATTACK = 0;
     final int IDX_STAT_ATTACK = 1;
     final int IDX_PP = 2;
-    final int IDX_TYPE = 3;
+    final int IDX_TYPE_ATTACK = 3;
 
 
     // Permet de transformer un fichier csv en tableaux de String
@@ -77,13 +77,67 @@ class JeuxPokemon extends Program{
 
     Attack newAttack(String nomAttack){
         Attack attack = new Attack();
-
+        int idx = idxAttack(nomAttack);
+        attack.name = listAttack[idx][IDX_NAME_ATTACK];
+        attack.pp = stringToInt(listAttack[idx][IDX_PP]);
+        attack.ppRemaining = attack.pp;
+        attack.stat = stringToInt(listAttack[idx][IDX_STAT_ATTACK]);
+        attack.type = listAttack[idx][IDX_TYPE_ATTACK];
         return attack;
     }
 
-    //Attack[] newListAttack(String attack1, String attack2, String attack3, String attack4){
-        
-    //}
+    void testNewAttack(){
+        Attack attack = new Attack();
+        attack = newAttack("Flammeche");
+        assertEquals(attack.name,"Flammeche");
+        assertEquals(attack.pp,25);
+        assertEquals(attack.ppRemaining,25);
+        assertEquals(attack.stat,40);
+        assertEquals(attack.type,"Feu");
+    }
+
+    Attack attackNULL(){
+        Attack attack = new Attack();
+        attack.name = "NULL";
+        attack.pp = 0;
+        attack.ppRemaining = 0;
+        attack.stat = 0;
+        attack.type = "NULL";
+        return attack;
+    }
+
+    Attack[] newListAttack(String attack1, String attack2, String attack3, String attack4, int lvl){
+        Attack[] attack = new Attack[4];
+        attack[0] = newAttack(attack1);
+        if(lvl >= 10){
+            attack[1] = newAttack(attack2);
+        }
+        else{
+            attack[1] = attackNULL();
+        }
+        if(lvl >= 20){
+            attack[2] = newAttack(attack3);
+        }
+        else{
+            attack[2] = attackNULL();
+        }
+        if(lvl >= 30){
+            attack[3] = newAttack(attack4);
+        }
+        else{
+            attack[3] = attackNULL();
+        }
+        return attack;
+    }
+
+    void testNewListAttack(){
+        Attack[] attack = new Attack[4];
+        attack = newListAttack("Flammeche","Lance Flame", "Lame Feuille","Surf", 21);
+        assertEquals(attack[0].name,"Flammeche");
+        assertEquals(attack[1].name,"Lance Flame");
+        assertEquals(attack[2].name,"Lame Feuille");
+        assertEquals(attack[3].name,"NULL");
+    }
 
     // permet la création du tableau contenant les affiniterDeType du pokemon celon son ou ses types
     String[] newaffiniterDeType( String type1, String type2){
@@ -138,7 +192,7 @@ class JeuxPokemon extends Program{
 
     // Permet de return l'indice d'un type depuis le tableau tabType
     int idxType(String type){
-        for(int i=1 ; i<length(tabType,2);i++){
+        for(int i=1 ; i<length(tabType,1);i++){
             if(equals(type,tabType[i][0])){
                 return i;
             }
@@ -152,7 +206,7 @@ class JeuxPokemon extends Program{
 
     // Permet de return l'indice d'une attaque depuis le tableau listAttack
     int idxAttack(String Attack){
-        for(int i=1;i<length(listAttack,2);i++){
+        for(int i=1;i<length(listAttack,1);i++){
             if(equals(Attack,listAttack[i][IDX_NAME_ATTACK])){
                 return i;
             }
