@@ -3,10 +3,24 @@ import extensions.CSVFile;
 
 class JeuxPokemon extends Program{
 
+    //Bordure
+
     // Creation tab
     final String[][] POKEDEX = toTabCSV(loadCSV("../ressources/Pokemon/pokemon.csv"));
     final String[][] tabType = toTabCSV(loadCSV("../ressources/Pokemon/type.csv"));
     final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));
+    final String[][] map = toTabCSV(loadCSV("../ressources/map/map.csv"));
+
+    //Afficher Map
+    void afficherMap(String[][] map){
+        for(int i = 0; i<length(map,1);i++){
+            for(int i2 = 0; i2<length(map,2);i2++){
+                println(map[i][i2]);
+            }
+        }
+
+
+    }
 
     // IDX POKEDEX
     final int IDX_ID = 0;
@@ -177,6 +191,7 @@ class JeuxPokemon extends Program{
         for(int i = 0;i<length(test2);i++){
             println(test2[i]);
         }
+        afficherMap(map);
         
     }
 

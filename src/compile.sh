@@ -9,3 +9,5 @@
 #javac -cp lib/program.jar:. src/Attack.java
 javac -cp ../lib/program.jar:. *.java
 #javac -cp lib/program.jar:. src/JeuxPokemon.java
+#javac -cp lib/program.jar:. src/map.java
+#javac -cp lib/program.jar:. src/Couleur.java
