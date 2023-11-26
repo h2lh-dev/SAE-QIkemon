@@ -27,6 +27,9 @@ class map extends Program{
                 if(equals(map[i][i2],"A")){
                     print("🌲");
                 }
+                if(equals(map[i][i2],"J")){
+                    print("👨");
+                }
                 if(equals(map[i][i2],"M")){
                     print("🏠");
                 }
@@ -72,6 +75,37 @@ class map extends Program{
         
         }
         println(BORDURE_BAS);
+    }
+
+    boolean deplacementPossible(String[][] map, String deplacement){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        boolean possible = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(map[x][y] == "J"){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
+        }
+        }
+
+        if(map[ligne][colonne+1]!="H" || map[ligne][colonne+1]!="F" || map[ligne][colonne-1]!="H" || map[ligne][colonne-1]!="F" || map[ligne+1][colonne]!="H" || map[ligne+1][colonne]!="F" || map[ligne-1][colonne]!="H" || map[ligne-1][colonne]!="F"){
+            return possible;
+        }else{
+            possible = true;
+        }
+        return possible;
+
+        
+    }
+
+    void deplacerJoueur(Stirng[][] map, String deplacement){
+        if()
 
 
     }
