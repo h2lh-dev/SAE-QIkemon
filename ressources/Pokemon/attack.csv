@@ -3,3 +3,27 @@ Flammeche,40,25,Feu
 Poing Feu,75,15,Feu
 Lance Flame,90,15,Feu
 Deflagration,110,5,Feu
+Fouet Lianes,45,25,Plante
+Feuille Magik,60,20,Plante
+Lame Feuille,90,15,Plante
+Megafouet,120,5,Plante
+Pistolet a O,40,25,Eau
+Bulles d'O,65,20,Eau
+Surf,90,15,Eau
+Hydrocanon,110,5,Eau
+Acid,40,30,Poison
+Detritus,65,20,Poison
+Direct Toxik,80,20,Poison
+Detricanon,120,5,Poison
+Tomberoche,60,15,Roche
+Eboulement,75,10,Roche
+Lame de Roc,100,5,Roche
+Fracass'Tete,150,5,Roche
+Charge,40,35,Normal
+Lutte,50,35,Normal
+Souplesse,80,20,Normal
+Ultralaser,150,5,Normal
+Picpic,35,35,Vol
+Lame d'air,75,15,Vol
+Vol,90,15,Vol
+Draco-Ascension,120,5,Vol
