@@ -142,7 +142,6 @@ class map extends Program{
         }
         if(equals(deplacement,"z")){
             if(deplacementPossible(map,deplacement) == true){
-                println("Je me déplace");
                 map[ligne-1][colonne] = map[ligne][colonne];
                 map[ligne][colonne] = mapSansJ[ligne][colonne];
             }
@@ -165,12 +164,45 @@ class map extends Program{
                 map[ligne][colonne] = mapSansJ[ligne][colonne];
             }
         }
+    }
 
+    void menu(){
+        clearScreen();
+        String r;
+        int idx = 0;
+        File nouvellePartie = newFile("../ressources/menu/menuNouvellePartie.txt");
+        File continuer = newFile("../ressources/menu/menuContinuer.txt");
+        clearScreen();
+        while(ready(nouvellePartie)) println(readLine(nouvellePartie));
+        print("Choix : ");
+        r = readString();
+        while(!equals("",r)){
+            if(equals("s",r)){
+                File continuer2 = newFile("../ressources/menu/menuContinuer.txt");
+                while(ready(continuer2)) println(readLine(continuer2));
+                idx = 1;
+            }
+            if(equals("z",r)){
+                File nouvellePartie2 = newFile("../ressources/menu/menuNouvellePartie.txt");
+                while(ready(nouvellePartie2)) println(readLine(nouvellePartie2));
+                idx = 2;
+            }
+            print("Choix : ");
+            r = readString();
+        }
 
+        if(idx == 2){
+
+            
+
+        }
+    
+        
     }
 
     void algorithm(){
         String r;
+        menu();
         do{
             afficherMap(map);
             println("Appuyer sur [e] pour quitter le jeu ! ");
