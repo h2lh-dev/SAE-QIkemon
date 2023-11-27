@@ -4,5 +4,5 @@
 #java -cp ${CLASSPATH}:. $@
 #cd ..
 
-java -cp ../lib/program.jar:. JeuxPokemon
+java -cp ../lib/program.jar:. map
 
