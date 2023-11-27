@@ -69,6 +69,7 @@ class JeuxPokemon extends Program{
         return pokemon;
     }
 
+    // Fonction qui permet la création d'une attaque
     Attack newAttack(String nomAttack){
         Attack attack = new Attack();
         int idx = idxAttack(nomAttack);
@@ -80,6 +81,7 @@ class JeuxPokemon extends Program{
         return attack;
     }
 
+    // Fonction test de NewAttack
     void testNewAttack(){
         Attack attack = new Attack();
         attack = newAttack("Flammeche");
@@ -90,6 +92,7 @@ class JeuxPokemon extends Program{
         assertEquals(attack.type,"Feu");
     }
 
+    // Fonction qui renvoie une attack null contenant aucun info
     Attack attackNULL(){
         Attack attack = new Attack();
         attack.name = "NULL";
@@ -100,6 +103,7 @@ class JeuxPokemon extends Program{
         return attack;
     }
 
+    // Fonction qui renvoie la liste des attaque utilisable par un pokemon
     Attack[] newListAttack(String attack1, String attack2, String attack3, String attack4, int lvl){
         Attack[] attack = new Attack[4];
         attack[0] = newAttack(attack1);
@@ -124,6 +128,7 @@ class JeuxPokemon extends Program{
         return attack;
     }
 
+    // fonction test de newListAttack
     void testNewListAttack(){
         Attack[] attack = new Attack[4];
         attack = newListAttack("Flammeche","Lance Flame", "Lame Feuille","Surf", 21);
@@ -184,6 +189,7 @@ class JeuxPokemon extends Program{
 
     }
 
+    // Fonction qui renvoie les faiblesses d'un type
     String[] faiblessesDeType(String[] affiniterDeType){
         String[] faiblesse = new String[10];
         int cpt = 0;
@@ -194,6 +200,7 @@ class JeuxPokemon extends Program{
         return faiblesse;
     }
 
+    // Fonction qui renvoie les ineficasse d'un pokemon
     String[] ineficasseDeType(String[] affiniterDeType){
         String[] ineficasse = new String[4];
         for(int i = 0;i<4;i++){
@@ -202,6 +209,7 @@ class JeuxPokemon extends Program{
         return ineficasse;
     }
 
+    // Fonction qui renvoie les resistance d'un pokemon
     String[] resistanceDeType(String[] affiniterDeType){
         String[] resistance = new String[22];
         int cpt = 0;
@@ -223,6 +231,7 @@ class JeuxPokemon extends Program{
     return -1;
     }
     
+    // Test de idxType
     void testIdxType(){
         assertEquals(idxType("Feu"), 2);
     }
@@ -237,6 +246,7 @@ class JeuxPokemon extends Program{
     return -1;
     }
 
+    // Test fonction idxAttack
     void testIdxAttack(){
         assertEquals(idxAttack("Flammeche"), 1);
     }
@@ -251,12 +261,25 @@ class JeuxPokemon extends Program{
         return xpRequis; 
     }
 
+    // Test fonction xpRequis
     void testXpRequis(){
         assertEquals(xpRequis(1),110);
         assertEquals(xpRequis(15),409);
         assertEquals(xpRequis(20),655);
         assertEquals(xpRequis(30),1694);
     }
+
+    // JOUEURS
+
+    Joueurs newJoueurs(){
+        Joueurs joueurs = new Joueurs;
+        joueurs.name = "temporaire";
+        joueurs.skin = 't';
+        joueurs.money = "500";
+        joueurs.team = new Pokemon[6];
+    }
+
+    // MENU 
 
 
     // MAP 

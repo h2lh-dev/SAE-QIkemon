@@ -4,8 +4,7 @@ import extensions.CSVFile;
 class map extends Program{
     final String BORDURE_HAUT = "╔═════════════════════════════════════════════════════QIKEMON════════════════════════════════════════════════════╗";
     final String BORDURE_BAS = "╚════════════════════════════════════════════════════════╩═══════════════════════════════════════════════════════╝";
-    final String[][] map = toTabCSV(loadCSV("../ressources/map/map3.csv"));
-    final String[][] mapSansJ = toTabCSV(loadCSV("../ressources/map/mapSansJ.csv"));
+    final String[][] map = toTabCSV(loadCSV("../ressources/map/map2.csv"));
 
     String[][] toTabCSV(CSVFile csv){
         String[][] tab = new String[rowCount(csv)][columnCount(csv)];
@@ -86,7 +85,7 @@ class map extends Program{
         while(!trouve){
             for(int x = 0; x<length(map,1);x++){
                 for(int y = 0; y<length(map,2);y++){
-                    if(equals(map[x][y],"J")){
+                    if(map[x][y] == "J"){
                         ligne = x;
                         colonne = y;
                         trouve = true;
@@ -94,94 +93,25 @@ class map extends Program{
                 }
         }
         }
-        if(equals(deplacement,"z")){
-            if(equals(map[ligne-1][colonne],"H") || equals(map[ligne-1][colonne],"F") || equals(map[ligne-1][colonne],"V") || equals(map[ligne-1][colonne],"T") || equals(map[ligne-1][colonne],"G")){
-                return true;
-            }else{
-                return possible;
-            }
+
+        if(map[ligne][colonne+1]!="H" || map[ligne][colonne+1]!="F" || map[ligne][colonne-1]!="H" || map[ligne][colonne-1]!="F" || map[ligne+1][colonne]!="H" || map[ligne+1][colonne]!="F" || map[ligne-1][colonne]!="H" || map[ligne-1][colonne]!="F"){
+            return possible;
+        }else{
+            possible = true;
         }
-        if(equals(deplacement,"s")){
-            if(equals(map[ligne+1][colonne],"H") || equals(map[ligne+1][colonne],"F") || equals(map[ligne+1][colonne],"V") || equals(map[ligne+1][colonne],"T") || equals(map[ligne+1][colonne],"G")){
-                return true;
-            }else{
-                return possible;
-            }
-        }
-        if(equals(deplacement,"q")){
-            if(equals(map[ligne][colonne-1],"H") || equals(map[ligne][colonne-1],"F") || equals(map[ligne][colonne-1],"V") || equals(map[ligne][colonne-1],"T") || equals(map[ligne][colonne-1],"G")){
-                return true;
-            }else{
-                return possible;
-            }
-        }
-        if(equals(deplacement,"d")){
-            if(equals(map[ligne][colonne+1],"H") || equals(map[ligne][colonne+1],"F") || equals(map[ligne][colonne+1],"V") || equals(map[ligne][colonne+1],"T") || equals(map[ligne][colonne+1],"G")){
-                return true;
-            }else{
-                return possible;
-            }
-        }
-        return possible;  
+        return possible;
+
+        
     }
 
-    void deplacerJoueur(String[][] map, String deplacement){
-        int ligne = 0;
-        int colonne = 0;
-        boolean trouve = false;
-        while(!trouve){
-            for(int x = 0; x<length(map,1);x++){
-                for(int y = 0; y<length(map,2);y++){
-                    if(equals(map[x][y],"J")){
-                        ligne = x;
-                        colonne = y;
-                        trouve = true;
-                    }
-                }
-        }
-        }
-        if(equals(deplacement,"z")){
-            if(deplacementPossible(map,deplacement) == true){
-                println("Je me déplace");
-                map[ligne-1][colonne] = map[ligne][colonne];
-                map[ligne][colonne] = mapSansJ[ligne][colonne];
-            }
-        }
-        if(equals(deplacement,"s")){
-            if(deplacementPossible(map,deplacement) == true){
-                map[ligne+1][colonne] = map[ligne][colonne];
-                map[ligne][colonne] = mapSansJ[ligne][colonne];
-            }
-        }
-        if(equals(deplacement,"d")){
-            if(deplacementPossible(map,deplacement) == true){
-                map[ligne][colonne+1] = map[ligne][colonne];
-                map[ligne][colonne] = mapSansJ[ligne][colonne];
-            }
-        }
-        if(equals(deplacement,"q")){
-            if(deplacementPossible(map,deplacement) == true){
-                map[ligne][colonne-1] = map[ligne][colonne];
-                map[ligne][colonne] = mapSansJ[ligne][colonne];
-            }
-        }
+    void deplacerJoueur(Stirng[][] map, String deplacement){
+        if()
 
 
     }
 
     void algorithm(){
-        String r;
-        do{
-            afficherMap(map);
-            println("Appuyer sur [e] pour quitter le jeu ! ");
-            print("Faites votre choix de déplacement : ");
-            r = readString();
-            deplacerJoueur(map,r);
-            
-        }while(!equals("e",r));
-        clearScreen();
-        println("La fin du jeu ! ");
-        
+        afficherMap(map);
     }
 
 
