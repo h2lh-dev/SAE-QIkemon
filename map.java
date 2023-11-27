@@ -2,8 +2,8 @@ import extensions.File;
 import extensions.CSVFile;
 
 class map extends Program{
-    final String BORDURE_HAUT = "╔═════════════════════════════════════════════════════QIKEMON════════════════════════════════════════════════════╗";
-    final String BORDURE_BAS = "╚════════════════════════════════════════════════════════╩═══════════════════════════════════════════════════════╝";
+    //final String BORDURE_HAUT = "╔═════════════════════════════════════════════════════QIKEMON════════════════════════════════════════════════════╗";
+    //final String BORDURE_BAS = "╚════════════════════════════════════════════════════════╩═══════════════════════════════════════════════════════╝";
     final String[][] map = toTabCSV(loadCSV("../ressources/map/map2.csv"));
 
     String[][] toTabCSV(CSVFile csv){
@@ -15,6 +15,7 @@ class map extends Program{
         }
         return tab;
     }
+
 
     void afficherMap(String[][] map){
         Couleur couleur = new Couleur();
