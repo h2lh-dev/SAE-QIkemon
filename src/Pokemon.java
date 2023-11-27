@@ -11,7 +11,6 @@ class Pokemon{
     int statDefense;
     int statVitesse;
     Attack[] attacks;
-    String[] affiniterDeType;
     String[] faiblesseDeType;
     String[] ineficasseDeType;
     String[] resistanceDeType;
