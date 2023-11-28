@@ -302,7 +302,7 @@ class JeuxPokemon extends Program{
     Joueurs newJoueurs(){
         Joueurs joueurs = new Joueurs();
         joueurs.name = "temporaire";
-        joueurs.skin = 't';
+        joueurs.genre = 1;
         joueurs.money = 500;
         joueurs.team = new Pokemon[6];
         joueurs.nbPokeball = 0;

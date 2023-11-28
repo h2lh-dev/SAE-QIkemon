@@ -217,7 +217,6 @@ class map extends Program{
             r = readString();
             
         }
-
         if(idx == 2){
             String choix;
             clearScreen();
@@ -252,29 +251,21 @@ class map extends Program{
             }
                 print("Choix : ");
                 choix = readString();
-                clearScreen();
-                
+                clearScreen();   
             }
-            
-            
-
-        }
-    
-        
+        }  
     }
 
     void algorithm(){
         String r;
         menu();
         do{
-            
             afficherMap(map);
             println("Appuyer sur [z] pour monter || Appuyer sur [s] pour descendre || Appuyer sur [q] pour aller à gauche || Appouyer sur [d] pour aller à droite");
             println("Appuyer sur [e] pour quitter le jeu ");
             print("Faites votre choix de déplacement : ");
             r = readString();
-            deplacerJoueur(map,r);
-            
+            deplacerJoueur(map,r);    
         }while(!equals("e",r));
         clearScreen();
         println("La fin du jeu ! ");
