@@ -191,33 +191,61 @@ class JeuxPokemon extends Program{
 
     // Fonction qui renvoie les faiblesses d'un type
     String[] faiblessesDeType(String[] affiniterDeType){
+
+    if(length(affiniterDeType == 36)){
         String[] faiblesse = new String[10];
         int cpt = 0;
-        for(int i = 5;i<14;i++){
+        for(int i = 4;i<14;i++){
             faiblesse[cpt] = affiniterDeType[i];
             cpt++;
+        }
+        return faiblesse;
+    }else{
+        String[] faiblesse = new String[5];
+        int cpt = 0;
+        for(int i = 2;i<7;i++){
+            faiblesse[cpt] = affiniterDeType[i];
+            cpt++
         }
         return faiblesse;
     }
 
     // Fonction qui renvoie les ineficasse d'un pokemon
     String[] ineficasseDeType(String[] affiniterDeType){
-        String[] ineficasse = new String[4];
-        for(int i = 0;i<4;i++){
-            ineficasse[i] = affiniterDeType[i];
-        }
-        return ineficasse;
+
+        if(length(affiniterDeType == 36)){
+            String[] ineficasse = new String[4];
+            for(int i = 0;i<4;i++){
+                ineficasse[i] = affiniterDeType[i];
+            }
+            return ineficasse;
+        }else{
+            String[] ineficasse = new String[2];
+            for(int i = 0;i<2;i++){
+                ineficasse[i] = affiniterDeType[i];
+            }
+            return ineficasse;
     }
 
     // Fonction qui renvoie les resistance d'un pokemon
     String[] resistanceDeType(String[] affiniterDeType){
-        String[] resistance = new String[22];
-        int cpt = 0;
-        for(int i = 15;i<36;i++){
-            resistance[cpt] = affiniterDeType[i];
-            cpt++;
-        }
-        return resistance;
+
+        if(length(affiniterDeType == 36)){
+            String[] resistance = new String[22];
+            int cpt = 0;
+            for(int i = 15;i<36;i++){
+                resistance[cpt] = affiniterDeType[i];
+                cpt++;
+            }
+            return resistance;
+        }else{
+            String[] resistance = new String[11];
+            int cpt = 0;
+            for(int i = 7;i<19;i++){
+                resistance[cpt] = affiniterDeType[i];
+                cpt++;
+            }
+            return resistance;
     }
     
 
@@ -277,7 +305,20 @@ class JeuxPokemon extends Program{
         joueurs.skin = 't';
         joueurs.money = 500;
         joueurs.team = new Pokemon[6];
+        joueurs.nbPokeball = 0;
         return joueurs;
+    }
+
+    void addPokemon(Pokemon pokemon){
+        boolean estVide = false;
+        int cpt = 0;
+        while(estVide == false){
+            if(joueurs.team[cpt] == null){
+                
+            }
+            cpt++;
+        }
+        
     }
 
     // MENU 
