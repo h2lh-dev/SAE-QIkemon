@@ -4,4 +4,5 @@ class Joueurs {
     int money;
     Pokemon[] team;
     int nbPokeball;
+    int genre; 
 }
