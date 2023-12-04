@@ -20,7 +20,7 @@ class map extends Program{
 
     Joueurs newJoueurs(){
         Joueurs joueurs = new Joueurs();
-        joueurs.genre = 0;
+        joueurs.genre = 1;
         return joueurs;
     }
 
