@@ -6,6 +6,7 @@ class Pokemon{
     int lvl;
     int xp;
     int xpRequis;
+    int hp;
     int statPv;
     int statAttack;
     int statDefense;
@@ -14,4 +15,6 @@ class Pokemon{
     String[] faiblesseDeType;
     String[] ineficasseDeType;
     String[] resistanceDeType;
+
+     
 }

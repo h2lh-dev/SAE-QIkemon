@@ -1,6 +1,7 @@
 import extensions.File;
 import extensions.CSVFile;
 
+
 class JeuxPokemon extends Program{
 
     //Bordure
@@ -9,7 +10,13 @@ class JeuxPokemon extends Program{
     final String[][] POKEDEX = toTabCSV(loadCSV("../ressources/Pokemon/pokemon.csv"));
     final String[][] tabType = toTabCSV(loadCSV("../ressources/Pokemon/type.csv"));
     final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));
-    final String[][] map = toTabCSV(loadCSV("../ressources/map/map.csv"));
+    final String[][] map = toTabCSV(loadCSV("../ressources/map/map3.csv"));
+    final String[][] mapSansJ = toTabCSV(loadCSV("../ressources/map/mapSansJ.csv"));
+
+    // Map
+    final String BORDURE_HAUT = "╔═════════════════════════════════════════════════════QIKEMON════════════════════════════════════════════════════╗";
+    final String BORDURE_BAS = "╚════════════════════════════════════════════════════════╩═══════════════════════════════════════════════════════╝"; 
+    final Joueurs joueurs = newJoueurs();
 
     // IDX POKEDEX
     final int IDX_ID = 0;
@@ -56,6 +63,7 @@ class JeuxPokemon extends Program{
         pokemon.lvl = lvl ;
         pokemon.xp = 0;
         pokemon.xpRequis = xpRequis(lvl);
+        pokemon.hp = hpPokemon(stringToInt(POKEDEX[id][IDX_STATPV]),lvl);
         pokemon.statPv = stringToInt(POKEDEX[id][IDX_STATPV]);
         pokemon.statAttack = stringToInt(POKEDEX[id][IDX_STATDEGAT]);
         pokemon.statDefense = stringToInt(POKEDEX[id][IDX_STATDEFENSE]);
@@ -67,6 +75,11 @@ class JeuxPokemon extends Program{
         pokemon.resistanceDeType = resistanceDeType(affiniterdetype);
 
         return pokemon;
+    }
+
+    // 
+    int hpPokemon(int stat, int lvl){
+        return (((stat*2)*lvl)/100) + 10 + lvl;
     }
 
     // Fonction qui permet la création d'une attaque
@@ -192,7 +205,7 @@ class JeuxPokemon extends Program{
     // Fonction qui renvoie les faiblesses d'un type
     String[] faiblessesDeType(String[] affiniterDeType){
 
-    if(length(affiniterDeType == 36)){
+    if(length(affiniterDeType) == 36){
         String[] faiblesse = new String[10];
         int cpt = 0;
         for(int i = 4;i<14;i++){
@@ -205,15 +218,16 @@ class JeuxPokemon extends Program{
         int cpt = 0;
         for(int i = 2;i<7;i++){
             faiblesse[cpt] = affiniterDeType[i];
-            cpt++
+            cpt++;
         }
         return faiblesse;
+    }
     }
 
     // Fonction qui renvoie les ineficasse d'un pokemon
     String[] ineficasseDeType(String[] affiniterDeType){
 
-        if(length(affiniterDeType == 36)){
+        if(length(affiniterDeType) == 36){
             String[] ineficasse = new String[4];
             for(int i = 0;i<4;i++){
                 ineficasse[i] = affiniterDeType[i];
@@ -225,12 +239,13 @@ class JeuxPokemon extends Program{
                 ineficasse[i] = affiniterDeType[i];
             }
             return ineficasse;
+        }
     }
 
     // Fonction qui renvoie les resistance d'un pokemon
     String[] resistanceDeType(String[] affiniterDeType){
 
-        if(length(affiniterDeType == 36)){
+        if(length(affiniterDeType )== 36){
             String[] resistance = new String[22];
             int cpt = 0;
             for(int i = 15;i<36;i++){
@@ -246,6 +261,7 @@ class JeuxPokemon extends Program{
                 cpt++;
             }
             return resistance;
+        }
     }
     
 
@@ -304,11 +320,12 @@ class JeuxPokemon extends Program{
         joueurs.name = "temporaire";
         joueurs.genre = 1;
         joueurs.money = 500;
-        joueurs.team = new Pokemon[6];
+        joueurs.team = new Pokemon[1];
         joueurs.nbPokeball = 0;
         return joueurs;
     }
 
+    /* 
     void addPokemon(Pokemon pokemon){
         boolean estVide = false;
         int cpt = 0;
@@ -320,35 +337,315 @@ class JeuxPokemon extends Program{
         }
         
     }
+    */
 
-    // MENU 
+    //COMBAT
+
+    boolean joueursPokemonValide(Joueurs joueurs){
+        boolean enVie = false;
+        for(int i = 0 ; i<1; i++){
+            if(joueurs.team[i].hp != 0){
+                enVie = true;
+            }
+        }
+        return enVie;
+    }
+
+    boolean adversairePokemonValide(Pokemon[] pokemons){
+        boolean enVie = false;
+        for(int i = 0 ; i<1; i++){
+            if(pokemons[i].hp != 0){
+                enVie = true;
+            }
+        }
+        return enVie;
+    }
+
+    void printCombat(Pokemon jPokemon, Pokemon aPokemon){
+        println("Votre Pokemon : " + jPokemon.nom + " " + jPokemon.hp + "/" + hpPokemon(jPokemon.statPv, jPokemon.lvl) );
+        println("Pokemon adverse : " + aPokemon.nom + " " + aPokemon.hp + "/" + hpPokemon(aPokemon.statPv, aPokemon.lvl) );
+        println("Attaque : 1-" + jPokemon.attacks[0].name +" 2-" + jPokemon.attacks[1].name +" 3-" + jPokemon.attacks[2].name +" 4-"+ jPokemon.attacks[3].name );
+    }
+
+    int useAttack(Pokemon jPokemon, int idAttack, Pokemon aPokemon){
+                //jPokemon.attacks[idAttack-1].pp = jPokemon.attacks[idAttack-1].pp -1;
+        return (((jPokemon.lvl *2 % 5) + 2) * jPokemon.attacks[idAttack-1].stat * jPokemon.statAttack /50) / aPokemon.statDefense ;
+    }
+
+    void startCombat(Joueurs joueurs, Pokemon[] adversaire){
+        int tour = 0;
+        Pokemon jPokemon = joueurs.team[0];
+        Pokemon aPokemon = adversaire[0];
+        while(joueursPokemonValide(joueurs) && adversairePokemonValide(adversaire)){
+            tour = tour +1;
+            printCombat(jPokemon,aPokemon);
+            aPokemon.hp = aPokemon.hp - useAttack(jPokemon,readInt(), aPokemon);
+            jPokemon.hp = jPokemon.hp - useAttack(aPokemon,2, jPokemon);
+        }
+    }
 
 
     // MAP 
 
-    //Afficher Map
     void afficherMap(String[][] map){
+        Couleur couleur = new Couleur();
+        clearScreen();
+        println(BORDURE_HAUT);
         for(int i = 0; i<length(map,1);i++){
+            print("|");
             for(int i2 = 0; i2<length(map,2);i2++){
-                println(map[i][i2]);
+                
+                if(equals(map[i][i2],"A")){
+                    print("🌲");
+                }
+                if(equals(map[i][i2],"J")){
+                    if(joueurs.genre == 1){
+                        print("👨");
+                    }else{
+                        print("👩");
+                    }
+                    
+                }
+                if(equals(map[i][i2],"M")){
+                    print("🏠");
+                }
+                if(equals(map[i][i2],"H")){
+                    print("  ");
+                }
+                if(equals(map[i][i2],"G")){
+                    print("  ");
+                }
+                if(equals(map[i][i2],"B")){
+                    print("🚧");
+                }
+                if(equals(map[i][i2],"T")){
+                    print("  ");
+                }
+                if(equals(map[i][i2],"C")){
+                    print("🐖");
+                }
+                if(equals(map[i][i2],"E")){
+                    print("🌊");
+                }
+                if(equals(map[i][i2],"R")){
+                    print("🌹");
+                }
+                if(equals(map[i][i2],"P")){
+                    print("🚪");
+                }
+                if(equals(map[i][i2],"F")){
+                    print("🌼");
+                }
+                if(equals(map[i][i2],"V")){
+                    print("  ");
+                }
+                if(i2 == 55){
+                    print("|");
+                    println();
+                }
+                print(couleur.COLOR_RESET);
             }
+        
         }
-
-
+        println(BORDURE_BAS);
     }
 
-
-
-
-
-    void _algorithm(){
-        String[] test2 = new String []{};
-        test2 = newaffiniterDeType("Sol","Eau");
-        for(int i = 0;i<length(test2);i++){
-            println(test2[i]);
+    boolean deplacementPossible(String[][] map, String deplacement){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        boolean possible = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(equals(map[x][y],"J")){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
         }
-        afficherMap(map);
-        
+        }
+        if(equals(deplacement,"z")){
+            if(equals(map[ligne-1][colonne],"H") || equals(map[ligne-1][colonne],"F") || equals(map[ligne-1][colonne],"V") || equals(map[ligne-1][colonne],"T") || equals(map[ligne-1][colonne],"G")){
+                return true;
+            }else{
+                return possible;
+            }
+        }
+        if(equals(deplacement,"s")){
+            if(equals(map[ligne+1][colonne],"H") || equals(map[ligne+1][colonne],"F") || equals(map[ligne+1][colonne],"V") || equals(map[ligne+1][colonne],"T") || equals(map[ligne+1][colonne],"G")){
+                return true;
+            }else{
+                return possible;
+            }
+        }
+        if(equals(deplacement,"q")){
+            if(equals(map[ligne][colonne-1],"H") || equals(map[ligne][colonne-1],"F") || equals(map[ligne][colonne-1],"V") || equals(map[ligne][colonne-1],"T") || equals(map[ligne][colonne-1],"G")){
+                return true;
+            }else{
+                return possible;
+            }
+        }
+        if(equals(deplacement,"d")){
+            if(equals(map[ligne][colonne+1],"H") || equals(map[ligne][colonne+1],"F") || equals(map[ligne][colonne+1],"V") || equals(map[ligne][colonne+1],"T") || equals(map[ligne][colonne+1],"G")){
+                return true;
+            }else{
+                return possible;
+            }
+        }
+        return possible;  
+    }
+
+    void deplacerJoueur(String[][] map, String deplacement){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(equals(map[x][y],"J")){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
+        }
+        }
+        if(equals(deplacement,"z")){
+            if(deplacementPossible(map,deplacement) == true){
+                map[ligne-1][colonne] = map[ligne][colonne];
+                map[ligne][colonne] = mapSansJ[ligne][colonne];
+            }
+        }
+        if(equals(deplacement,"s")){
+            if(deplacementPossible(map,deplacement) == true){
+                map[ligne+1][colonne] = map[ligne][colonne];
+                map[ligne][colonne] = mapSansJ[ligne][colonne];
+            }
+        }
+        if(equals(deplacement,"d")){
+            if(deplacementPossible(map,deplacement) == true){
+                map[ligne][colonne+1] = map[ligne][colonne];
+                map[ligne][colonne] = mapSansJ[ligne][colonne];
+            }
+        }
+        if(equals(deplacement,"q")){
+            if(deplacementPossible(map,deplacement) == true){
+                map[ligne][colonne-1] = map[ligne][colonne];
+                map[ligne][colonne] = mapSansJ[ligne][colonne];
+            }
+        }
+    }
+
+    void menu(){
+        clearScreen();
+        String r;
+        int idx = 0;
+        clearScreen();
+        File nouvellePartie = newFile("../ressources/menu/menuNouvellePartie.txt");
+        File continuer = newFile("../ressources/menu/menuContinuer.txt");
+        while(ready(nouvellePartie)) println(readLine(nouvellePartie));
+        idx = 2;
+        print("Choix : ");
+        r = readString();
+        if(equals("",r)){
+            idx = 2;
+        }
+        while(!equals("",r)){
+            
+            if(equals("s",r)){
+                clearScreen();
+                File continuer2 = newFile("../ressources/menu/menuContinuer.txt");
+                while(ready(continuer2)) println(readLine(continuer2));
+                idx = 1;
+            }
+            if(equals("z",r)){
+                clearScreen();
+                File nouvellePartie2 = newFile("../ressources/menu/menuNouvellePartie.txt");
+                while(ready(nouvellePartie2)) println(readLine(nouvellePartie2));
+                idx = 2;
+            }
+            if(!equals("z",r) || !equals("s",r)){
+                clearScreen();
+                if(idx == 2){
+                    File nouvellePartie3 = newFile("../ressources/menu/menuNouvellePartie.txt");
+                    while(ready(nouvellePartie3)) println(readLine(nouvellePartie3));
+                }else{
+                    File continuer3 = newFile("../ressources/menu/menuContinuer.txt");
+                    while(ready(continuer3)) println(readLine(continuer3));
+                }
+            }
+            print("Choix : ");
+            r = readString();
+            
+        }
+        if(idx == 2){
+            String choix;
+            clearScreen();
+            File choisirGenreHomme = newFile("../ressources/menu/nouvellePartieHomme.txt");
+            while(ready(choisirGenreHomme)) println(readLine(choisirGenreHomme));
+            joueurs.genre = 1;
+            print("Choix : ");
+            choix = readString();
+            while(!equals("",choix)){
+                if(equals("z",choix)){
+                    clearScreen();
+                    File choisirGenreHomme2 = newFile("../ressources/menu/nouvellePartieHomme.txt");
+                    while(ready(choisirGenreHomme2)) println(readLine(choisirGenreHomme2));
+                    joueurs.genre = 1;
+                }
+                if(equals("s",choix)){
+                    clearScreen();
+                    File choisirGenreFemme2 = newFile("../ressources/menu/nouvellePartieFemme.txt");
+                    while(ready(choisirGenreFemme2)) println(readLine(choisirGenreFemme2));
+                    joueurs.genre = 2;
+
+                }
+                if(!equals("z",r) || !equals("s",r)){
+                clearScreen();
+                if(joueurs.genre == 1){
+                    File choisirGenreHomme3 = newFile("../ressources/menu/nouvellePartieHomme.txt");
+                    while(ready(choisirGenreHomme3)) println(readLine(choisirGenreHomme3));
+                }else{
+                    File choisirGenreFemme3 = newFile("../ressources/menu/nouvellePartieFemme.txt");
+                    while(ready(choisirGenreFemme3)) println(readLine(choisirGenreFemme3));
+                }
+            }
+                print("Choix : ");
+                choix = readString();
+                clearScreen();   
+            }
+        }  
+    }
+   
+    // Algorithm
+    void algorithm(){
+        println("Voulez vous faire un combat ou visiter la map");
+        println("1-Combat");     
+        println("2-Map"); 
+        Joueurs j1 = newJoueurs();
+       
+        j1.team[0] = newPokemon(3, 60) ;
+        Pokemon[] adversaire = new Pokemon[1];
+        adversaire[0] = newPokemon(94,50);
+        int choix = readInt();
+        if(choix == 1){
+            startCombat(j1, adversaire);
+        }if(choix == 2){
+            String r;
+            menu();
+            do{
+                afficherMap(map);
+                println("Appuyer sur [z] pour monter || Appuyer sur [s] pour descendre || Appuyer sur [q] pour aller à gauche || Appouyer sur [d] pour aller à droite");
+                println("Appuyer sur [e] pour quitter le jeu ");
+                print("Faites votre choix de déplacement : ");
+                r = readString();
+                deplacerJoueur(map,r);    
+            }while(!equals("e",r));
+            clearScreen();
+            println("La fin du jeu ! ");
+        }
     }
 
 
