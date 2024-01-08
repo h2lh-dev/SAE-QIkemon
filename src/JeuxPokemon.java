@@ -354,7 +354,7 @@ class JeuxPokemon extends Program{
     boolean adversairePokemonValide(Pokemon[] pokemons){
         boolean enVie = false;
         for(int i = 0 ; i<1; i++){
-            if(pokemons[i].hp != 0){
+            if(pokemons[i].hp > 0){
                 enVie = true;
             }
         }
@@ -362,6 +362,7 @@ class JeuxPokemon extends Program{
     }
 
     void printCombat(Pokemon jPokemon, Pokemon aPokemon){
+        clearScreen();
         println("Votre Pokemon : " + jPokemon.nom + " " + jPokemon.hp + "/" + hpPokemon(jPokemon.statPv, jPokemon.lvl) );
         println("Pokemon adverse : " + aPokemon.nom + " " + aPokemon.hp + "/" + hpPokemon(aPokemon.statPv, aPokemon.lvl) );
         println("Attaque : 1-" + jPokemon.attacks[0].name +" 2-" + jPokemon.attacks[1].name +" 3-" + jPokemon.attacks[2].name +" 4-"+ jPokemon.attacks[3].name );
