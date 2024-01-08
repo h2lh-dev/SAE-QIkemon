@@ -192,7 +192,7 @@ class JeuxPokemon extends Program{
     // Test pour verifier la fonction newaffiniterDeType
     void testNewaffiniterDeType(){
         String[] test1 = new String []{"NULL", "NULL", "Eau", "Sol", "Roche", "NULL", "NULL", "Feu", "Plante", "Glace", "Insecte", "Acier", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"};
-        assertEquals(test1,newaffiniterDeType("Feu","NULL"));
+        assertArrayEquals(test1,newaffiniterDeType("Feu","NULL"));
         /*String[] test2 = new String []{};
         test2 = newaffiniterDeType("Feu","Eau");
         for(int i = 0;i<length(test2);i++){

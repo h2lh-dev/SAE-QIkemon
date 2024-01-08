@@ -21,6 +21,6 @@ Afin d'utiliser le projet, il suffit de taper les commandes suivantes dans un te
 Permet la compilation des fichiers présents dans 'src' et création des fichiers '.class' dans 'classes'
 
 ```
-./run.sh Qikemon
+./run.sh
 ```
 Permet le lancement du jeu
