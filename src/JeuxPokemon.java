@@ -181,9 +181,9 @@ class JeuxPokemon extends Program{
     // fonction test de newListAttack
     void testNewListAttack(){
         Attack[] attack = new Attack[4];
-        attack = newListAttack("Flammeche","Lance Flame", "Lame Feuille","Surf", 21);
+        attack = newListAttack("Flammeche","Lance Flamme", "Lame Feuille","Surf", 21);
         assertEquals(attack[0].name,"Flammeche");
-        assertEquals(attack[1].name,"Lance Flame");
+        assertEquals(attack[1].name,"Lance Flamme");
         assertEquals(attack[2].name,"Lame Feuille");
         assertEquals(attack[3].name,"NULL");
     }
@@ -335,7 +335,7 @@ class JeuxPokemon extends Program{
     // Verifie si les pokemons du joueur ont encore de la vie 
     boolean joueursPokemonValide(Joueurs joueurs){
         boolean enVie = false;
-        for(int i = 0 ; i<1; i++){
+        for(int i = 0 ; i<6; i++){
             if(joueurs.team[i].hp > 0){
                 enVie = true;
             }
