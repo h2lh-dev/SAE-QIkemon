@@ -7,11 +7,11 @@ class JeuxPokemon extends Program{
     //Bordure
 
     // Creation tab
-    final String[][] POKEDEX = toTabCSV(loadCSV("../ressources/Pokemon/pokemon.csv"));
-    final String[][] tabType = toTabCSV(loadCSV("../ressources/Pokemon/type.csv"));
-    final String[][] listAttack = toTabCSV(loadCSV("../ressources/Pokemon/Attack.csv"));
-    final String[][] map = toTabCSV(loadCSV("../ressources/map/map3.csv"));
-    final String[][] mapSansJ = toTabCSV(loadCSV("../ressources/map/mapSansJ.csv"));
+    final String[][] POKEDEX = toTabCSV(loadCSV("./ressources/Pokemon/pokemon.csv"));
+    final String[][] tabType = toTabCSV(loadCSV("./ressources/Pokemon/type.csv"));
+    final String[][] listAttack = toTabCSV(loadCSV("./ressources/Pokemon/attack.csv"));
+    final String[][] map = toTabCSV(loadCSV("./ressources/map/map3.csv"));
+    final String[][] mapSansJ = toTabCSV(loadCSV("./ressources/map/mapSansJ.csv"));
 
     // Map
     final String BORDURE_HAUT = "╔═════════════════════════════════════════════════════QIKEMON════════════════════════════════════════════════════╗";
@@ -61,12 +61,14 @@ class JeuxPokemon extends Program{
         pokemon.type1 = POKEDEX[id][IDX_TYPE1];
         pokemon.type2 = POKEDEX[id][IDX_TYPE2];
         pokemon.lvl = lvl ;
+        pokemon.lvlEvo = stringToInt(POKEDEX[id][IDX_LVLEVO]);
         pokemon.xp = 0;
         pokemon.xpRequis = xpRequis(lvl);
         pokemon.hp = hpPokemon(stringToInt(POKEDEX[id][IDX_STATPV]),lvl);
+        pokemon.hpMax = hpPokemon(stringToInt(POKEDEX[id][IDX_STATPV]),lvl);
         pokemon.statPv = stringToInt(POKEDEX[id][IDX_STATPV]);
-        pokemon.statAttack = stringToInt(POKEDEX[id][IDX_STATDEGAT]);
-        pokemon.statDefense = stringToInt(POKEDEX[id][IDX_STATDEFENSE]);
+        pokemon.statAttack = statAttack(stringToInt(POKEDEX[id][IDX_STATDEGAT]),lvl);
+        pokemon.statDefense = statDefense(stringToInt(POKEDEX[id][IDX_STATDEFENSE]),lvl);
         pokemon.statVitesse = stringToInt(POKEDEX[id][IDX_STATVITESSE]);
         pokemon.attacks = newListAttack(POKEDEX[id][IDX_ATTACK1],POKEDEX[id][IDX_ATTACK2],POKEDEX[id][IDX_ATTACK3],POKEDEX[id][IDX_ATTACK4],pokemon.lvl);
         String[] affiniterdetype = newaffiniterDeType(pokemon.type1, pokemon.type2);
@@ -77,8 +79,31 @@ class JeuxPokemon extends Program{
         return pokemon;
     }
 
-    // 
+    // Creer un pokemon NULL qui sert d'emplacement vide dans l'equipe
+    Pokemon newNullPokemon(){
+        Pokemon pokemon = new Pokemon();
+        pokemon.hp = -1;
+        pokemon.hpMax = -1;
+        pokemon.lvl = -1;
+        pokemon.id = 0;
+        pokemon.xp = 0;
+        pokemon.xpRequis = 1;
+        pokemon.lvlEvo = 1;
+        return pokemon;
+    }
+
+    // Donne les hp du pokemon selon sa stat et son niveau
     int hpPokemon(int stat, int lvl){
+        return (((stat*2)*lvl)/100) + 10 + lvl;
+    }
+
+    // Donne la stat attaque selon son niveau
+    int statAttack(int stat, int lvl){
+        return (((stat*2)*lvl)/100) + 10 + lvl;
+    }
+
+    // Donne la defense selon son niveau
+    int statDefense(int stat, int lvl){
         return (((stat*2)*lvl)/100) + 10 + lvl;
     }
 
@@ -105,7 +130,19 @@ class JeuxPokemon extends Program{
         assertEquals(attack.type,"Feu");
     }
 
-    // Fonction qui renvoie une attack null contenant aucun info
+    // Fonction qui permet l'evolution d'un pokemon
+    Pokemon evoPokemon(Pokemon pokemon){
+        Pokemon pokemonf = newPokemon(pokemon.id+1, pokemon.lvl);
+        if(pokemon.lvl == pokemon.lvlEvo){
+            println("Félicitations ! Ton" + pokemon.nom + " a évolué en "+ pokemonf.nom );
+            delay(3000);
+            return pokemonf;
+            
+        }
+        return pokemon;
+    }
+
+    // Fonction qui renvoie une attack null contenant aucune info
     Attack attackNULL(){
         Attack attack = new Attack();
         attack.name = "NULL";
@@ -116,7 +153,7 @@ class JeuxPokemon extends Program{
         return attack;
     }
 
-    // Fonction qui renvoie la liste des attaque utilisable par un pokemon
+    // Fonction qui renvoie la liste des attaques utilisable par un pokemon
     Attack[] newListAttack(String attack1, String attack2, String attack3, String attack4, int lvl){
         Attack[] attack = new Attack[4];
         attack[0] = newAttack(attack1);
@@ -154,51 +191,18 @@ class JeuxPokemon extends Program{
     // permet la création du tableau contenant les affiniterDeType du pokemon celon son ou ses types
     String[] newaffiniterDeType( String type1, String type2){
 
-        if(equals(type2,"NULL")){
             String[] affiniterDeType = new String[18];
             for(int i =0;i<18;i++ ){
                 affiniterDeType[i] = tabType[idxType(type1)][i+1] ;
             }
             return affiniterDeType;
-        }else{
-        String[] affiniterDeType = new String[36];
-        int i2 = 1;
-        int i3 = 0;
-            for(int i = 1;i<=18;i++){
-
-                affiniterDeType[i3] = tabType[idxType(type1)][i];
-                affiniterDeType[i2] = tabType[idxType(type2)][i];
-                i3 = i3 +2;
-                i2 = i2 +2;        
-            }
-            for(int i =0;i<36;i++){
-                for(int cpt = 0;cpt<36;cpt++){
-                    if(equals(affiniterDeType[i],affiniterDeType[cpt])){
-                        if(i>= 0 && i<= 4){
-                            affiniterDeType[cpt] = "NULL";
-                        }
-                        else if(i>=5 && i<= 15 && cpt >=16 ){
-                            affiniterDeType[cpt] = "NULL";
-                            affiniterDeType[i] = "NULL";
-                        }
-
-                    }
-                }
-            }
-        return affiniterDeType;
-        }
+        
     }
 
     // Test pour verifier la fonction newaffiniterDeType
     void testNewaffiniterDeType(){
         String[] test1 = new String []{"NULL", "NULL", "Eau", "Sol", "Roche", "NULL", "NULL", "Feu", "Plante", "Glace", "Insecte", "Acier", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL"};
         assertArrayEquals(test1,newaffiniterDeType("Feu","NULL"));
-        /*String[] test2 = new String []{};
-        test2 = newaffiniterDeType("Feu","Eau");
-        for(int i = 0;i<length(test2);i++){
-            println(test2[i]);
-        }
-        */
 
     }
 
@@ -224,7 +228,7 @@ class JeuxPokemon extends Program{
     }
     }
 
-    // Fonction qui renvoie les ineficasse d'un pokemon
+    // Fonction qui renvoie les inefficace d'un Type d'un pokemon
     String[] ineficasseDeType(String[] affiniterDeType){
 
         if(length(affiniterDeType) == 36){
@@ -242,7 +246,7 @@ class JeuxPokemon extends Program{
         }
     }
 
-    // Fonction qui renvoie les resistance d'un pokemon
+    // Fonction qui renvoie les resistances d'un pokemon
     String[] resistanceDeType(String[] affiniterDeType){
 
         if(length(affiniterDeType )== 36){
@@ -256,8 +260,8 @@ class JeuxPokemon extends Program{
         }else{
             String[] resistance = new String[11];
             int cpt = 0;
-            for(int i = 7;i<19;i++){
-                resistance[cpt] = affiniterDeType[i];
+            for(int i = 7;i<=17;i++){
+                resistance[cpt] = affiniterDeType[i-1];
                 cpt++;
             }
             return resistance;
@@ -315,45 +319,34 @@ class JeuxPokemon extends Program{
 
     // JOUEURS
 
+    // initialisation du joueur
     Joueurs newJoueurs(){
         Joueurs joueurs = new Joueurs();
         joueurs.name = "temporaire";
         joueurs.genre = 1;
         joueurs.money = 500;
-        joueurs.team = new Pokemon[1];
+        joueurs.team = new Pokemon[6];
         joueurs.nbPokeball = 0;
         return joueurs;
     }
 
-    /* 
-    void addPokemon(Pokemon pokemon){
-        boolean estVide = false;
-        int cpt = 0;
-        while(estVide == false){
-            if(joueurs.team[cpt] == null){
-                
-            }
-            cpt++;
-        }
-        
-    }
-    */
-
     //COMBAT
 
+    // Verifie si les pokemons du joueur ont encore de la vie 
     boolean joueursPokemonValide(Joueurs joueurs){
         boolean enVie = false;
         for(int i = 0 ; i<1; i++){
-            if(joueurs.team[i].hp != 0){
+            if(joueurs.team[i].hp > 0){
                 enVie = true;
             }
         }
         return enVie;
     }
 
+    // Verifie si les pokemons adverses ont encore de la vie
     boolean adversairePokemonValide(Pokemon[] pokemons){
         boolean enVie = false;
-        for(int i = 0 ; i<1; i++){
+        for(int i = 0 ; i<length(pokemons); i++){
             if(pokemons[i].hp > 0){
                 enVie = true;
             }
@@ -361,33 +354,236 @@ class JeuxPokemon extends Program{
         return enVie;
     }
 
+    // Permet d'afficher les attaques
     void printCombat(Pokemon jPokemon, Pokemon aPokemon){
-        clearScreen();
+        
         println("Votre Pokemon : " + jPokemon.nom + " " + jPokemon.hp + "/" + hpPokemon(jPokemon.statPv, jPokemon.lvl) );
         println("Pokemon adverse : " + aPokemon.nom + " " + aPokemon.hp + "/" + hpPokemon(aPokemon.statPv, aPokemon.lvl) );
         println("Attaque : 1-" + jPokemon.attacks[0].name +" 2-" + jPokemon.attacks[1].name +" 3-" + jPokemon.attacks[2].name +" 4-"+ jPokemon.attacks[3].name );
     }
 
-    int useAttack(Pokemon jPokemon, int idAttack, Pokemon aPokemon){
-                //jPokemon.attacks[idAttack-1].pp = jPokemon.attacks[idAttack-1].pp -1;
-        return (((jPokemon.lvl *2 % 5) + 2) * jPokemon.attacks[idAttack-1].stat * jPokemon.statAttack /50) / aPokemon.statDefense ;
+    // Fonction pour l'utilisation des attaques
+    int useAttack(Pokemon jPokemon, int idAttack, Pokemon aPokemon, boolean player){
+        int bonus = 1;
+        if(player == true){
+            int nb1 = (int) (random() *100);
+            int nb2 = (int) (random() *100);
+            boolean saisieValide = true;
+            println(nb1 + " * " + nb2);
+            String saisie = "0";
+            do{
+            saisie = readString();
+            saisieValide = true;
+                for(int i = 0 ; i<length(saisie);i++){
+                    if(charAt(saisie, i) < '0' || charAt(saisie, i) > '9'){
+                        saisieValide = false;
+                    }
+                }
+           }
+           while(saisieValide == false);
+           int reponse = stringToInt(saisie);
+           if(nb1*nb2 == reponse){
+            println("Bien joué !");
+            bonus = 3;
+           }else{
+            print("Mauvaise réponse.");
+           }
+           delay(1000);
+           }
+           
+           
+                   
+        return ((((((jPokemon.lvl *2 % 5) + 2) * jPokemon.attacks[idAttack-1].stat * jPokemon.statAttack /50) / aPokemon.statDefense) *2)*bonus)+1 ;
     }
 
+    // Fonction de lancement de combat
     void startCombat(Joueurs joueurs, Pokemon[] adversaire){
         int tour = 0;
-        Pokemon jPokemon = joueurs.team[0];
-        Pokemon aPokemon = adversaire[0];
+        int cptJ =0;
+        int cptA =0;
+        Pokemon jPokemon = joueurs.team[cptJ];
+        Pokemon aPokemon = adversaire[cptA];
         while(joueursPokemonValide(joueurs) && adversairePokemonValide(adversaire)){
             tour = tour +1;
             printCombat(jPokemon,aPokemon);
-            aPokemon.hp = aPokemon.hp - useAttack(jPokemon,readInt(), aPokemon);
-            jPokemon.hp = jPokemon.hp - useAttack(aPokemon,2, jPokemon);
+            int jattack = useAttack(jPokemon,verifSaisieAttack(jPokemon,readString()), aPokemon,true);
+            int aattack = useAttack(aPokemon,1, jPokemon,false);
+            aPokemon.hp = aPokemon.hp - jattack;
+            jPokemon.hp = jPokemon.hp - aattack;
+            clearScreen();
+            println(jPokemon.nom + " a fait " + jattack + " dégâts, Mais " + aattack + " lui ont été infligés par l'ennemi." );
+            if(jPokemon.hp <= 0 && cptJ < length(joueurs.team)-1 && joueursPokemonValide(joueurs)){
+                println(jPokemon.nom + " est tombé ko");
+                cptJ++;
+                jPokemon = joueurs.team[cptJ];
+                println(jPokemon.nom + " va être envoyé");
+            }
+            if(aPokemon.hp <= 0){
+
+                if(cptA < length(adversaire)-1){
+                    cptA++;
+                    aPokemon = adversaire[cptA];
+                    println(aPokemon.nom + " va être envoyé");
+                }
+                println(aPokemon.nom + " est tombé ko");
+                jPokemon = gainXp(jPokemon, aPokemon.lvl);
+                
+            }
+        }
+        if(joueursPokemonValide(joueurs) == false){
+            println("Tu as malheureusement perdu ce combat, tous tes Pokémon sont tombés KO. Retourne chez toi pour soigner tes Pokémon.");
+        }
+        else{
+            println("Bravo, tu as gagné le combat.");
+        }
+
+        for(int i = 0; i<6;i++){
+            if(joueurs.team[i].xp >= joueurs.team[i].xpRequis){
+                joueurs.team[i] = newPokemon(joueurs.team[i].id, joueurs.team[i].lvl+1);
+                println("Bravo, ton Pokémon est maintenant de niveau " + joueurs.team[i].lvl);
+                delay(2000);
+                joueurs.team[i] = evoPokemon(joueurs.team[i]);
+            }
+        }
+    
+
+        delay(4000);
+    }
+
+    // Fonction d'ajout de l'xp gagner à un pokemon
+    Pokemon gainXp(Pokemon pokemon,int lvl){
+        pokemon.xp = pokemon.xp + (lvl*100);
+        println("Ton Pokémon a gagné " + (lvl*100) + "points d'xp.");
+        delay(1000);
+        return pokemon;
+    }
+
+    // Fonction de vérification du choix d'attaque
+    int verifSaisieAttack(Pokemon pokemon, String saisie){
+        boolean saisieValide = false;
+        int saisieInt = 0;
+        while(saisieValide == false){
+            if(length(saisie) != 1){
+                println("Saisie invalide.");
+                saisie = readString();
+            } 
+            else if(charAt(saisie,0) >= '5' || charAt(saisie,0) <='0' ){
+                println("Saisie invalide.");
+                saisie = readString();
+            }else if(pokemon.lvl <= 9 && (charAt(saisie,0) == '2' || charAt(saisie,0) == '3' ||  charAt(saisie,0) == '4')){
+                println("Tu ne possèdes pas cette attaque.");
+                saisie = readString();
+            }else if(pokemon.lvl <= 19 && (charAt(saisie,0) == '3' ||  charAt(saisie,0) == '4')){
+                println("Tu ne possèdes pas cette attaque.");
+                saisie = readString();
+            }else if(pokemon.lvl <= 29 && charAt(saisie,0) == '4'){
+                println("Tu ne possèdes pas cette attaque.");
+                saisie = readString();
+            }else{
+                saisieInt = stringToInt(saisie);
+                saisieValide = true ; 
+            }
+        } 
+        return saisieInt;
+    }
+
+    // Permet de lancer un combat si le joueur est sur de l'herbe
+    void estSurHerbe(String[][] map){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(equals(map[x][y],"J")){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
+            }
+        }
+        Pokemon[] adversaire = new Pokemon[1];
+        adversaire[0] = newPokemon(16,5);
+        if(equals(mapSansJ[ligne][colonne],"F") ){
+            if( (int)(random()*10) == 0){
+                if( joueursPokemonValide(joueurs) == true){
+                    startCombat(joueurs, adversaire);
+                }
+                
+            }
+        }
+        if(adversaire[0].hp <=0){
+            lancerCapture(adversaire[0]);
         }
     }
 
+    // Permet de capturer un pokemon à la fin d'un combat
+    void lancerCapture(Pokemon pokemon){
+        println("Voulez-vous capturer ce Pokemon");
+        println("Oui ou Non");
+        String r= "";
+        int i2 = 0;
+        boolean saisie = false;
+        do{
+            r = readString();
+            r = toUpperCase(r);
+            if(equals(r,"OUI") ){
+                saisie = true;
+            }
+            if(equals(r,"NON") ){
+                saisie = true;
+            }
+        }while(!saisie);
+        if(equals(r,"OUI")){
+            for(int i = 0 ; i<6;i++){
+                if(joueurs.team[i].id == 0){
+                    joueurs.team[i] = pokemon;
+                    i = 10;
+                    i2=i;
+                }
+            }
+            if(i2 != 10){
+                println("Vous n'avez plus de place dans votre équipe.");
+            }
+        }
+        
+    }
 
-    // MAP 
+    // Permet de lancer le combat d'arene
+    String combatArene(String[][] map){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(equals(map[x][y],"J")){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
+            }
+        }
+        Pokemon[] adversaire = new Pokemon[3];
+        adversaire[0] = newPokemon(95,15);
+        adversaire[1] = newPokemon(20,15);
+        adversaire[2] = newPokemon(18,15);
+        if(ligne == 7 && colonne == 46){
+            startCombat(joueurs, adversaire);
+        }
+        if(adversaire[2].hp <=0){
+            fin();
+            delay(6000);
+            return "e";
+        }
+        return "";
+    }
 
+    // MAP
+
+    // Permet d'afficher la map
     void afficherMap(String[][] map){
         Couleur couleur = new Couleur();
         clearScreen();
@@ -451,6 +647,7 @@ class JeuxPokemon extends Program{
         println(BORDURE_BAS);
     }
 
+    // Permet de verifier les déplacement
     boolean deplacementPossible(String[][] map, String deplacement){
         int ligne = 0;
         int colonne = 0;
@@ -498,6 +695,7 @@ class JeuxPokemon extends Program{
         return possible;  
     }
 
+    // Déplace le joueur sur la map
     void deplacerJoueur(String[][] map, String deplacement){
         int ligne = 0;
         int colonne = 0;
@@ -539,13 +737,39 @@ class JeuxPokemon extends Program{
         }
     }
 
+    // Heal les pokemon si le joueur se trouve devant sa maison
+    void healPokemon(String[][] map){
+        int ligne = 0;
+        int colonne = 0;
+        boolean trouve = false;
+        while(!trouve){
+            for(int x = 0; x<length(map,1);x++){
+                for(int y = 0; y<length(map,2);y++){
+                    if(equals(map[x][y],"J")){
+                        ligne = x;
+                        colonne = y;
+                        trouve = true;
+                    }
+                }
+            }
+        }
+        if(ligne ==9 && colonne ==7 ){
+            for(int i = 0; i<6; i++){
+                joueurs.team[i].hp = joueurs.team[i].hpMax ;
+            }
+            println("Tes Pokémon ont été soignés.");
+            delay(2000);
+        }
+    }
+
+    // Permet d'affficher le Menu
     void menu(){
         clearScreen();
         String r;
         int idx = 0;
         clearScreen();
-        File nouvellePartie = newFile("../ressources/menu/menuNouvellePartie.txt");
-        File continuer = newFile("../ressources/menu/menuContinuer.txt");
+        File nouvellePartie = newFile("./ressources/menu/menuNouvellePartie.txt");
+        File continuer = newFile("./ressources/menu/menuContinuer.txt");
         while(ready(nouvellePartie)) println(readLine(nouvellePartie));
         idx = 2;
         print("Choix : ");
@@ -557,34 +781,39 @@ class JeuxPokemon extends Program{
             
             if(equals("s",r)){
                 clearScreen();
-                File continuer2 = newFile("../ressources/menu/menuContinuer.txt");
+                File continuer2 = newFile("./ressources/menu/menuContinuer.txt");
                 while(ready(continuer2)) println(readLine(continuer2));
                 idx = 1;
             }
             if(equals("z",r)){
                 clearScreen();
-                File nouvellePartie2 = newFile("../ressources/menu/menuNouvellePartie.txt");
+                File nouvellePartie2 = newFile("./ressources/menu/menuNouvellePartie.txt");
                 while(ready(nouvellePartie2)) println(readLine(nouvellePartie2));
                 idx = 2;
             }
             if(!equals("z",r) || !equals("s",r)){
                 clearScreen();
                 if(idx == 2){
-                    File nouvellePartie3 = newFile("../ressources/menu/menuNouvellePartie.txt");
+                    File nouvellePartie3 = newFile("./ressources/menu/menuNouvellePartie.txt");
                     while(ready(nouvellePartie3)) println(readLine(nouvellePartie3));
                 }else{
-                    File continuer3 = newFile("../ressources/menu/menuContinuer.txt");
+                    File continuer3 = newFile("./ressources/menu/menuContinuer.txt");
                     while(ready(continuer3)) println(readLine(continuer3));
+                    idx = 1;
                 }
             }
             print("Choix : ");
             r = readString();
             
         }
+        if(idx ==1){
+            load();
+        }
         if(idx == 2){
+            idx =4;
             String choix;
             clearScreen();
-            File choisirGenreHomme = newFile("../ressources/menu/nouvellePartieHomme.txt");
+            File choisirGenreHomme = newFile("./ressources/menu/nouvellePartieHomme.txt");
             while(ready(choisirGenreHomme)) println(readLine(choisirGenreHomme));
             joueurs.genre = 1;
             print("Choix : ");
@@ -592,13 +821,13 @@ class JeuxPokemon extends Program{
             while(!equals("",choix)){
                 if(equals("z",choix)){
                     clearScreen();
-                    File choisirGenreHomme2 = newFile("../ressources/menu/nouvellePartieHomme.txt");
+                    File choisirGenreHomme2 = newFile("./ressources/menu/nouvellePartieHomme.txt");
                     while(ready(choisirGenreHomme2)) println(readLine(choisirGenreHomme2));
                     joueurs.genre = 1;
                 }
                 if(equals("s",choix)){
                     clearScreen();
-                    File choisirGenreFemme2 = newFile("../ressources/menu/nouvellePartieFemme.txt");
+                    File choisirGenreFemme2 = newFile("./ressources/menu/nouvellePartieFemme.txt");
                     while(ready(choisirGenreFemme2)) println(readLine(choisirGenreFemme2));
                     joueurs.genre = 2;
 
@@ -606,10 +835,10 @@ class JeuxPokemon extends Program{
                 if(!equals("z",r) || !equals("s",r)){
                 clearScreen();
                 if(joueurs.genre == 1){
-                    File choisirGenreHomme3 = newFile("../ressources/menu/nouvellePartieHomme.txt");
+                    File choisirGenreHomme3 = newFile("./ressources/menu/nouvellePartieHomme.txt");
                     while(ready(choisirGenreHomme3)) println(readLine(choisirGenreHomme3));
                 }else{
-                    File choisirGenreFemme3 = newFile("../ressources/menu/nouvellePartieFemme.txt");
+                    File choisirGenreFemme3 = newFile("./ressources/menu/nouvellePartieFemme.txt");
                     while(ready(choisirGenreFemme3)) println(readLine(choisirGenreFemme3));
                 }
             }
@@ -617,37 +846,102 @@ class JeuxPokemon extends Program{
                 choix = readString();
                 clearScreen();   
             }
+            if(idx==4){
+                intro();
+            }
         }  
+        
     }
-   
+
+    // Permet de creer la team apres avoir choisi le pokemon
+    void creerTeam(int id){
+        joueurs.team[0] = newPokemon(id,5);
+        for(int i = 1; i<6;i++){
+            joueurs.team[i] = newNullPokemon();
+        }
+    }
+
+    // Affiche l'introduction et le choix du premier pokemon
+    void intro(){
+        String r;
+        boolean choixValide = false;
+        do{ 
+            clearScreen();
+            File choixPokemon1 = newFile("./ressources/menu/choixPokemon1.txt");
+            while(ready(choixPokemon1)) println(readLine(choixPokemon1));
+            print("Choix : ");
+            r = readString();
+            if(equals(r,"1")){
+                choixValide = true;
+                creerTeam(4);
+                
+            }
+            if(equals(r,"2")){
+                choixValide = true;
+                creerTeam(7);
+            }
+            if(equals(r,"3")){
+                choixValide = true;
+                creerTeam(1);
+            }
+        }while(!choixValide);
+    }
+
+    // Lance la fonction de fin du jeu
+     void fin(){
+        File fin = newFile("./ressources/menu/menuFin.txt");
+        while(ready(fin)) println(readLine(fin));
+    }
+
+    // Transforme un int en String
+    String intToString(int i){
+        String chaine = "";
+        chaine+= i;
+        return chaine;
+    }
+
+    // Permet la sauvegarde du jeu
+    void saveGame(){
+        String[][] content = new String[6][3];
+        String directory = "./ressources/save/";
+        for(int i = 0; i<length(joueurs.team);i++){
+            content[i][0]= intToString(joueurs.team[i].id);
+            content[i][1]= intToString(joueurs.team[i].lvl);
+        }
+        content[0][2] = intToString(joueurs.genre);
+        saveCSV(content, directory + "save.csv");
+    }
+
+    // Permet de charger la partie sauvegarder
+    void load(){
+        CSVFile currentFile = loadCSV("./ressources/save/save.csv");
+        for(int i = 0; i<rowCount(currentFile); i++){
+            if(equals(getCell(currentFile, i, 0),"0")){
+                joueurs.team[i] = newNullPokemon();
+            }
+            if(!equals(getCell(currentFile, i, 0),"0")){
+                joueurs.team[i] = newPokemon(stringToInt(getCell(currentFile, i ,0)), stringToInt(getCell(currentFile, i, 1))); 
+            }
+            joueurs.genre = stringToInt(getCell(currentFile,0,2));
+        }
+    }
     // Algorithm
     void algorithm(){
-        println("Voulez vous faire un combat ou visiter la map");
-        println("1-Combat");     
-        println("2-Map"); 
-        Joueurs j1 = newJoueurs();
-       
-        j1.team[0] = newPokemon(3, 60) ;
-        Pokemon[] adversaire = new Pokemon[1];
-        adversaire[0] = newPokemon(94,50);
-        int choix = readInt();
-        if(choix == 1){
-            startCombat(j1, adversaire);
-        }if(choix == 2){
-            String r;
+        String r ;
             menu();
             do{
                 afficherMap(map);
                 println("Appuyer sur [z] pour monter || Appuyer sur [s] pour descendre || Appuyer sur [q] pour aller à gauche || Appouyer sur [d] pour aller à droite");
-                println("Appuyer sur [e] pour quitter le jeu ");
+                println("Appuyer sur [e] pour sauvegarder et quitter le jeu ");
                 print("Faites votre choix de déplacement : ");
+                r = combatArene(map);
                 r = readString();
-                deplacerJoueur(map,r);    
+                deplacerJoueur(map,r);
+                estSurHerbe(map);
+                healPokemon(map);    
             }while(!equals("e",r));
             clearScreen();
-            println("La fin du jeu ! ");
+            saveGame();
+            println("Partie sauvegarder !");
         }
     }
-
-
-}

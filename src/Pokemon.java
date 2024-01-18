@@ -4,9 +4,11 @@ class Pokemon{
     String type1;
     String type2;
     int lvl;
+    int lvlEvo;
     int xp;
     int xpRequis;
     int hp;
+    int hpMax;
     int statPv;
     int statAttack;
     int statDefense;

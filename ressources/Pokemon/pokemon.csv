@@ -1,13 +1,13 @@
 id,nom,type1,type2,statPv,statAttack,statDefense,statVitesse,lvlEvo,attack1,attack2,attack3,attack4
 1,Bulbizarre,Plante,Poison,45,65,65,45,16,Fouet Lianes,Feuille Magik,Lame Feuille,Megafouet
 2,Herbizarre,Plante,Poison,60,80,80,65,32,Fouet Lianes,Feuille Magik,Lame Feuille,Megafouet
-3,Florizarre,Plante,Poison,80,100,100,80,NULL,Fouet Lianes,Feuille Magik,Lame Feuille,Megafouet
+3,Florizarre,Plante,Poison,80,100,100,80,0,Fouet Lianes,Feuille Magik,Lame Feuille,Megafouet
 4,Salamèche,Feu,NULL,39,60,50,65,16,Flammeche,Poing Feu,Lance Flamme,Deflagration
 5,Reptincel,Feu,NuLL,58,80,65,80,36,Flammeche,Poing Feu,Lance Flamme,Deflagration
-6,Dracaufeu,Feu,Vol,78,109,85,100,NULL,Poing Feu,Lance Flamme,Deflagration,Draco-Ascension
+6,Dracaufeu,Feu,Vol,78,109,85,100,0,Poing Feu,Lance Flamme,Deflagration,Draco-Ascension
 7,Carapuce,Eau,NULL,44,65,64,43,16,Pistolet a O,Bulles d'O,Surf,Hydrocanon
 8,Carabaffe,Eau,NULL,59,65,80,58,36,Pistolet a O,Bulles d'O,Surf,Hydrocanon
-9,Tortank,Eau,NULL,79,85,105,78,NULL,Pistolet a O,Bulles d'O,Surf,Hydrocanon
+9,Tortank,Eau,NULL,79,85,105,78,0,Pistolet a O,Bulles d'O,Surf,Hydrocanon
 10,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 11,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
@@ -16,9 +16,9 @@ id,nom,type1,type2,statPv,statAttack,statDefense,statVitesse,lvlEvo,attack1,atta
 15,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 16,Roucool,Normal,Vol,40,45,40,56,18,Picpic,Lame d'air,Vol,Draco-Ascension
 17,Roucoups,Normal,Vol,63,60,55,71,36,Picpic,Lame d'air,Vol,Draco-Ascension
-18,Roucarnage,Normal,Vol,83,80,75,91,NULL,Lame d'air,Vol,Draco-Acension,Ultralaser
+18,Roucarnage,Normal,Vol,83,80,75,91,0,Lame d'air,Vol,Draco-Acension,Ultralaser
 19,Rattata,Normal,NULL,30,56,35,72,20,Charge,Lutte,Souplesse,Ultralaser
-20,Rattatac,Normal,NULL,55,81,70,97,NULL,Charge,Lutte,Souplesse,Ultralaser
+20,Rattatac,Normal,NULL,55,81,70,97,0,Charge,Lutte,Souplesse,Ultralaser
 21,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 22,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 23,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
@@ -92,8 +92,8 @@ id,nom,type1,type2,statPv,statAttack,statDefense,statVitesse,lvlEvo,attack1,atta
 91,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 92,Fantominus,Spectre,Poison,30,100,35,80,25,Acid,Detritus,Direct Toxik,Detricanon
 93,Spectrum,Spectre,Poison,45,115,55,95,50,Acid,Detritus,Direct Toxik,Detricanon
-94,Ectoplasma,Spectre,Poison,60,130,75,110,NULL,Acid,Detritus,Direct Toxik,Detricanon
-95,Onix,Roche,Sol,35,45,160,70,NULL,Tomberoche,Eboulement,Lame de Roc,Fracass'Tete
+94,Ectoplasma,Spectre,Poison,60,130,75,110,0,Acid,Detritus,Direct Toxik,Detricanon
+95,Onix,Roche,Sol,35,45,160,70,0,Tomberoche,Eboulement,Lame de Roc,Fracass'Tete
 96,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 97,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 98,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
